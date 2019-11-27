@@ -5,6 +5,7 @@ pipeline {
     environment {
         VER = '19.03.4'
         TAG =  "${env.BRANCH_NAME}"
+        VERSION = "${env.BUILD_ID}"
 
     }
 
@@ -30,7 +31,7 @@ pipeline {
         stage ("Build image") {
             steps {
                 echo "Build"
-                sh 'make -e TAG=${TAG} build'
+                sh 'make -e TAG=${TAG} -e VERSION=${VERSION} build'
             }
         }
 
@@ -38,7 +39,7 @@ pipeline {
             steps {
                 echo "Push to Docker repo"
                  withDockerRegistry(credentialsId: 'b7ca1bd5-fbe5-4c50-afc5-9c3cceff84cd', url: ""){
-                    sh 'make -e TAG=${TAG} release'
+                    sh 'make -e TAG=${TAG} -e VERSION=${VERSION} release'
                  }
             }
         }

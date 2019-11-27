@@ -2,6 +2,7 @@ BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 TAG  ?=$(BRANCH)
 NAME ?=app
 REPO ?=andrewpgit
+VERSION ?=1
 .PHONY: help
 
 help:
@@ -14,15 +15,15 @@ help:
 
 build:
 	@echo "Build docker image $(NAME):$(TAG)"
-	docker build -t $(REPO)/$(NAME):$(TAG) .
+	docker build -t $(REPO)/$(NAME):$(TAG)-$(VERSION) .
 
 rebuild: 
 	@echo "Build the container without caching"
-	docker build  --no-cache -t $(REPO)/$(NAME):$(TAG) .
+	docker build  --no-cache -t $(REPO)/$(NAME):$(TAG)-$(VERSION) .
 
 run: 
 	@echo "Run the container"
-	docker run -d --name=$(NAME)_$(TAG) -p 8080:8080 $(REPO)/$(NAME):$(TAG)
+	docker run -d --name=$(NAME)_$(TAG) -p 8080:8080 $(REPO)/$(NAME):$(TAG)-$(VERSION)
 
 stop: 
 	@echo "Stop and remove a running container"
@@ -30,7 +31,7 @@ stop:
 
 release:
 	@echo "Push Docker to Docker registry"
-	docker push $(REPO)/$(NAME):$(TAG)
+	docker push $(REPO)/$(NAME):$(TAG)-$(VERSION)
 
 delete: 
 	@echo "Remove docker image"
