@@ -1,12 +1,12 @@
 const express = require('express');
+const os      = require('os');
 
 const PORT = 8080;
 const HOST = '0.0.0.0';
-
 //Web App
 const app = express();
 app.get('/', (req, res) => {
-  res.send('Hello world DEV\n');
+  res.send('Environment\t'+ os.hostname() + '\n');
 });
 
 app.listen(PORT, HOST);
