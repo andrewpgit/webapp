@@ -1,6 +1,8 @@
 version: 2.1
 executors:
   build-executor:
+    environment:
+      IMAGE_NAME: ${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}
     docker:
       - image: alpine:3.10
 jobs:
@@ -25,21 +27,21 @@ jobs:
           name: build images
           command: |
             echo ${CIRCLE_BRANCH}
-            echo ${CIRCLE_TAG}
-            if [ -z "$CIRCLE_BRANCH" ]; then
-                make -e TAG=${CIRCLE_TAG} build
-            else
-                make -e TAG=${CIRCLE_BRANCH} build
-            fi
+            make  -e NAME=${IMAGE_NAME} -e TAG=latest build
 
       - deploy:
           name: deployment
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-            if  [ -z  "$CIRCLE_BRANCH" ]; then
-                make -e TAG=${CIRCLE_TAG} release
-            else
-                make -e TAG=${CIRCLE_BRANCH} release
+            if  [ -n  "$CIRCLE_BRANCH" ]; then
+                docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${CIRCLE_BRANCH}-latest
+                make -e IMAGE_NAME=${IMAGE_NAME} -e TAG=${CIRCLE_BRANCH}-latest release
+            fi
+
+            if  [ -n "$CIRCLE_TAG" ]; then
+                echo   ${CIRCLE_BRANCH}
+                docker tag ${IMAGE_NAME}:latest  ${IMAGE_NAME}:${CIRCLE_TAG}
+                make -e IMAGE_NAME=${IMAGE_NAME} -e TAG=${CIRCLE_TAG} release
             fi
 
             make delete
@@ -54,4 +56,5 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              ignore: /.*/
+              only:
+                - /^dev-*/

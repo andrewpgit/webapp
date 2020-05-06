@@ -3,6 +3,7 @@ TAG  ?=$(BRANCH)
 NAME ?=app
 REPO ?=andrewpgit
 VERSION ?=0.0.1
+IMAGE_NAME ?=$(REPO)/$(NAME)
 .PHONY: help
 
 help:
@@ -15,15 +16,15 @@ help:
 
 build:
 	@echo "Build docker image $(NAME):$(TAG)"
-	docker build -t $(REPO)/$(NAME):$(TAG) .
+	docker build -t $(IMAGE_NAME):$(TAG) .
 
 rebuild:
 	@echo "Build the container without caching"
-	docker build  --no-cache -t $(REPO)/$(NAME):$(TAG) .
+	docker build  --no-cache -t $(IMAGE_NAME):$(TAG) .
 
 run:
 	@echo "Run the container"
-	docker run -d --name=$(NAME)_$(TAG) -p 8080:8080 $(REPO)/$(NAME):$(TAG)
+	docker run -d --name=$(NAME)_$(TAG) -p 8080:8080 $(IMAGE_NAME):$(TAG)
 
 stop:
 	@echo "Stop and remove a running container"
@@ -31,7 +32,7 @@ stop:
 
 release:
 	@echo "Push Docker to Docker registry"
-	docker push $(REPO)/$(NAME):$(TAG)
+	docker push $(IMAGE_NAME):$(TAG)
 
 delete:
 	@echo "Remove docker image"
