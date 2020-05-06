@@ -61,4 +61,4 @@ workflows:
               only: /^v.*/
             branches:
               ingnore:
-                - /^dev-*/
+                - /dev/
