@@ -2,7 +2,7 @@ BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 TAG  ?=$(BRANCH)
 NAME ?=app
 REPO ?=andrewpgit
-VERSION ?=1
+VERSION ?=0.0.1
 .PHONY: help
 
 help:
