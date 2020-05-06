@@ -36,4 +36,4 @@ release:
 
 delete:
 	@echo "Remove docker image"
-	docker images -q  -f label=app=nodejs | xargs -I ARGS docker rmi ARGS
+	docker images -q  -f label=app=nodejs | xargs -I ARGS docker rmi -f ARGS
