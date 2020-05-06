@@ -36,7 +36,7 @@ jobs:
           name: deployment
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-            if  [ -z  $CIRCLE_BRANCH" ]; then
+            if  [ -z  "$CIRCLE_BRANCH" ]; then
                 make -e TAG=${CIRCLE_TAG} relaese
             else
                 make -e TAG=${CIRCLE_BRANCH} relaese
