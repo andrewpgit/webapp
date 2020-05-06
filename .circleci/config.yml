@@ -26,7 +26,7 @@ jobs:
           command: |
             echo ${CIRCLE_BRANCH}
             echo ${CIRCLE_TAG}
-            if [ -z $CIRCLE_BRANCH ]; then
+            if [ -z "$CIRCLE_BRANCH" ]; then
                 make -e TAG=${CIRCLE_TAG} build
             else
                 make -e TAG=${CRICLE_BRANCH} build
