@@ -2,7 +2,7 @@ version: 2.1
 executors:
   build-executor:
     environment:
-      IMAGE_NAME: ${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}
+      IMAGE_NAME: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
     docker:
       - image: alpine:3.10
 jobs:
@@ -32,8 +32,9 @@ jobs:
       - deploy:
           name: deployment
           command: |
-            IMAGE_NAME="${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}"
-            echo IMAGE_NAME
+            echo $IMAGE_NAME
+            IMAGE_NAME="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            echo $IMAGE_NAME
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
 
             if  [ -n  "$CIRCLE_BRANCH" ]; then
