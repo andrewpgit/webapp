@@ -29,13 +29,15 @@ jobs:
             echo ${CIRCLE_BRANCH}
             make  -e IMAGE_NAME=${IMAGE_NAME} -e TAG=latest build
 
-      - run:
+      - deploy:
           name: deployment
           command: |
+
+            echo $IMAGE_NAME
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
 
             if  [ -n  "$CIRCLE_BRANCH" ]; then
-                docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${CIRCLE_BRANCH}-latest
+                docker tag $IMAGE_NAME:latest $IMAGE_NAME:${CIRCLE_BRANCH}-latest
                 make -e IMAGE_NAME=${IMAGE_NAME} -e TAG=${CIRCLE_BRANCH}-latest release
             fi
 
