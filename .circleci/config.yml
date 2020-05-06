@@ -48,7 +48,6 @@ jobs:
                 make -e IMAGE_NAME=${IMAGE_NAME} -e TAG=${CIRCLE_TAG} release
             fi
 
-           echo "completed"
 
 workflows:
   version: 2
