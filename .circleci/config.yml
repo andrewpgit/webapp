@@ -30,6 +30,7 @@ jobs:
             make  -e IMAGE_NAME=${IMAGE_NAME} -e TAG=latest build
 
       - deploy:
+        executor: build-executor
           name: deployment
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
