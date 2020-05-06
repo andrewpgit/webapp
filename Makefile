@@ -23,11 +23,11 @@ rebuild:
 
 run:
 	@echo "Run the container"
-	docker run -d --name=$(NAME):$(TAG) -p 8080:8080 $(REPO)/$(NAME):$(TAG)
+	docker run -d --name=$(NAME)_$(TAG) -p 8080:8080 $(REPO)/$(NAME):$(TAG)
 
 stop:
 	@echo "Stop and remove a running container"
-	docker stop $(NAME):$(TAG); docker rm $(NAME):$(TAG)
+	docker stop $(NAME)_$(TAG); docker rm $(NAME)_$(TAG)
 
 release:
 	@echo "Push Docker to Docker registry"
