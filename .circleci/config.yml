@@ -27,7 +27,7 @@ jobs:
           name: build images
           command: |
             echo ${CIRCLE_BRANCH}
-            make  -e NAME=${IMAGE_NAME} -e TAG=latest build
+            make  -e IMAGE_NAME=${IMAGE_NAME} -e TAG=latest build
 
       - deploy:
           name: deployment
@@ -56,4 +56,5 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              only: /^dev-*/
+              only:
+                - /^dev-*/
