@@ -37,9 +37,9 @@ jobs:
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
             if  [ -z  "$CIRCLE_BRANCH" ]; then
-                make -e TAG=${CIRCLE_TAG} relaese
+                make -e TAG=${CIRCLE_TAG} release
             else
-                make -e TAG=${CIRCLE_BRANCH} relaese
+                make -e TAG=${CIRCLE_BRANCH} release
             fi
 
             make delete
