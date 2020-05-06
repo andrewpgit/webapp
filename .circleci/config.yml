@@ -1,0 +1,58 @@
+version: 2.1
+executors:
+  build-executor:
+    docker:
+      - image: alpine:3.10
+jobs:
+  build:
+    executor: build-executor
+    working_directory: ~/build
+
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            echo "Install packages"
+            VER='18.06.3-ce'
+            apk add libffi-dev openssl-dev gcc libc-dev make
+            wget -O /tmp/docker-${VER}.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${VER}.tgz
+            tar -xz -C /tmp -f /tmp/docker-${VER}.tgz
+            mv /tmp/docker/* /usr/local/bin/
+      - setup_remote_docker
+
+      - run:
+          name: build images
+          command:
+            echo ${CIRCLE_BRANCH}
+            echo ${CIRCLE_TAG}
+            if [ -z ${CIRCLE_BRANCH} ]; then
+                make -e TAG=${CIRCLE_TAG} build
+            else
+                make -e TAG=${CRICLE_BRANCH} build
+            fi
+
+      - deploy:
+          name: deployment
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
+            if  [ -z  ${CIRCLE_BRANCH} ] ; then
+                make -e TAG=${CIRCLE_TAG} relaese
+            else
+                make -e TAG=${CIRCLE_BRANCH} relaese
+            fi
+
+            make delete
+
+workflows:
+  version: 2
+  build_deploy:
+    jobs:
+      - build:
+          context: docker-context
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only:
+                - dev

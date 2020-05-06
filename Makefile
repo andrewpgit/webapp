@@ -7,7 +7,7 @@ VERSION ?=0.0.1
 
 help:
 	@echo ""
-	@echo "rebuild 	- build a Docker image without cache" 
+	@echo "rebuild 	- build a Docker image without cache"
 	@echo "build 	- build a Docker image"
 	@echo "release 	- release a Docker image to Docker Hub"
 	@echo "stop	- stop and remove container"
@@ -15,24 +15,24 @@ help:
 
 build:
 	@echo "Build docker image $(NAME):$(TAG)"
-	docker build -t $(REPO)/$(NAME):$(TAG)-$(VERSION) .
+	docker build -t $(REPO)/$(NAME):$(TAG) .
 
-rebuild: 
+rebuild:
 	@echo "Build the container without caching"
-	docker build  --no-cache -t $(REPO)/$(NAME):$(TAG)-$(VERSION) .
+	docker build  --no-cache -t $(REPO)/$(NAME):$(TAG) .
 
-run: 
+run:
 	@echo "Run the container"
-	docker run -d --name=$(NAME)_$(TAG) -p 8080:8080 $(REPO)/$(NAME):$(TAG)-$(VERSION)
+	docker run -d --name=$(NAME):$(TAG) -p 8080:8080 $(REPO)/$(NAME):$(TAG)
 
-stop: 
+stop:
 	@echo "Stop and remove a running container"
-	docker stop $(NAME)_$(TAG); docker rm $(NAME)_$(TAG)
+	docker stop $(NAME):$(TAG); docker rm $(NAME):$(TAG)
 
 release:
 	@echo "Push Docker to Docker registry"
-	docker push $(REPO)/$(NAME):$(TAG)-$(VERSION)
+	docker push $(REPO)/$(NAME):$(TAG)
 
-delete: 
+delete:
 	@echo "Remove docker image"
 	docker images -q  -f label=app=nodejs | xargs -I ARGS docker rmi ARGS
