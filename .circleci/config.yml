@@ -4,7 +4,7 @@ executors:
     environment:
       IMAGE_NAME: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
     docker:
-      - image: alpine:3.10
+      - image: circleci/golang:1.14
 jobs:
   build:
     executor: build-executor
@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
       - run:
           name: Install dependencies
           command: |
@@ -21,8 +23,6 @@ jobs:
             wget -O /tmp/docker-${VER}.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${VER}.tgz
             tar -xz -C /tmp -f /tmp/docker-${VER}.tgz
             mv /tmp/docker/* /usr/local/bin/
-      - setup_remote_docker:
-          docker_layer_caching: false
 
       - run:
           name: build images
