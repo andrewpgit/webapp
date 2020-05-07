@@ -6,10 +6,10 @@ const HOST = '0.0.0.0';
 //Web App
 const app = express();
 app.get('/', (req, res) => {
-  res.send('Environment\t'+ os.hostname() + '\n');
+  res.send('Environment\t'+ os.hostname() + 'v0.0.3' + '\n');
 });
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 
-//test v0.0.1
+//test v0.0.3
