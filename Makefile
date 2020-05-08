@@ -37,7 +37,7 @@ release:
 
 archive:
 	@echo "Archive docker image to ${IMAGE_NAME}.tar"
-	docker save -o  $(IMAGE_NAME).tar $(IMAGE_NAME)
+	docker save -o  image.tar $(IMAGE_NAME)
 
 delete:
 	@echo "Remove docker image"
