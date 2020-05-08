@@ -31,18 +31,19 @@ jobs:
             make  -e IMAGE_NAME=${IMAGE_NAME} -e TAG=latest build
       - run:
           name: Archive docker image.
-          command: make -e IMAGE_NAME=${IMAGE_NAME}  archive
+          command: |
+              make -e IMAGE_NAME=${IMAGE_NAME}  archive
 
       - persist_to_workspace:
         root: .
-        path: ./${IMAGE_NAME}.tar
+        paths: ./${IMAGE_NAME}.tar
 
 
   push_image:
     executor: build-executor
 
     steps:
-      - attache_workspace:
+      - attach_workspace:
           at: ~/build
 
       - setup_remote_docker
