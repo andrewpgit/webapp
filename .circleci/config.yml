@@ -37,7 +37,7 @@ jobs:
       - persist_to_workspace:
         root: .
         paths:
-          - ./${IMAGE_NAME}.tar
+          - ./image.tar
 
 
   push_image:
@@ -57,7 +57,7 @@ jobs:
             wget -O /tmp/docker-${VER}.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${VER}.tgz
             tar -xz -C /tmp -f /tmp/docker-${VER}.tgz
             mv /tmp/docker/* /usr/local/bin
-            docker load -i ~/build/${IMAGE_NAME}.tar
+            docker load -i ~/build/image.tar
 
       - deploy:
           name: deployment
