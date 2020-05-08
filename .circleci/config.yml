@@ -87,10 +87,3 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-      - push_image:
-          requires:
-            - build
-          context: docker-context
-          filters:
-            tags:
-              only: /^v.*/
