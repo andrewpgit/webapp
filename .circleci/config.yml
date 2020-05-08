@@ -37,7 +37,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - ./image.tar
+            - .
 
 
   push_image:
