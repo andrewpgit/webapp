@@ -36,7 +36,8 @@ jobs:
 
       - persist_to_workspace:
         root: .
-        paths: ./${IMAGE_NAME}.tar
+        paths:
+          - ./${IMAGE_NAME}.tar
 
 
   push_image:
