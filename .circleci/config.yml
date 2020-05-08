@@ -34,13 +34,10 @@ jobs:
           command: |
               make -e IMAGE_NAME=${IMAGE_NAME}  archive
 
-      - persist_to_workspace:
-        root: .
-        paths:
-          - ./image.tar
 
 
-  
+
+
 
 
 workflows:
