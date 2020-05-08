@@ -35,7 +35,7 @@ jobs:
               make -e IMAGE_NAME=${IMAGE_NAME}  archive
 
       - persist_to_workspace:
-        root: .
+        root: /tmp
         paths:
           - ./image.tar
 
@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: ~/build
+          at: /tmp
 
       - setup_remote_docker
 
@@ -57,7 +57,7 @@ jobs:
             wget -O /tmp/docker-${VER}.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${VER}.tgz
             tar -xz -C /tmp -f /tmp/docker-${VER}.tgz
             mv /tmp/docker/* /usr/local/bin
-            docker load -i ~/build/image.tar
+            docker load -i /tmp/image.tar
 
       - deploy:
           name: deployment
