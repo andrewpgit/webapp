@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - checkout
-      - setup_remote_docker:
+      - setup_remote_docker
 
       - run:
           name: Install dependencies
