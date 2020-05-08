@@ -40,43 +40,7 @@ jobs:
           - ./image.tar
 
 
-  push_image:
-    executor: build-executor
-
-    steps:
-      - attach_workspace:
-          at: ~/build
-
-      - setup_remote_docker
-
-      - run:
-          name: Load docker image
-          command: |
-            echo "Install packages"
-            VER='18.06.3-ce'
-            wget -O /tmp/docker-${VER}.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${VER}.tgz
-            tar -xz -C /tmp -f /tmp/docker-${VER}.tgz
-            mv /tmp/docker/* /usr/local/bin
-            docker load -i ~/build/image.tar
-
-      - deploy:
-          name: deployment
-          command: |
-
-            IMAGE_NAME="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo $IMAGE_NAME
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-
-            if  [ -n  "$CIRCLE_BRANCH" ]; then
-                docker tag $IMAGE_NAME:latest $IMAGE_NAME:${CIRCLE_BRANCH}-latest
-                make -e IMAGE_NAME=${IMAGE_NAME} -e TAG=${CIRCLE_BRANCH}-latest release
-            fi
-
-            if  [ -n "$CIRCLE_TAG" ]; then
-                echo   ${CIRCLE_BRANCH}
-                docker tag ${IMAGE_NAME}:latest  ${IMAGE_NAME}:${CIRCLE_TAG}
-                make -e IMAGE_NAME=${IMAGE_NAME} -e TAG=${CIRCLE_TAG} release
-            fi
+  
 
 
 workflows:
