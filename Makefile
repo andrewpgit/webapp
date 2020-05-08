@@ -4,6 +4,7 @@ NAME ?=app
 REPO ?=andrewpgit
 VERSION ?=0.0.1
 IMAGE_NAME ?=$(REPO)/$(NAME)
+DIR_TEMP ?="/tmp"
 .PHONY: help
 
 help:
@@ -15,7 +16,7 @@ help:
 	@echo ""
 
 build:
-	@echo "Build docker image $(NAME):$(TAG)"
+	@echo "Build docker image $(IMAGE_NAME):$(TAG)"
 	docker build -t $(IMAGE_NAME):$(TAG) .
 
 rebuild:
@@ -33,6 +34,10 @@ stop:
 release:
 	@echo "Push Docker to Docker registry"
 	docker push $(IMAGE_NAME):$(TAG)
+
+archive:
+	@echo "Archive docker image to ${IMAGE_NAME}.tar"
+	docker save -o  $(IMAGE_NAME).tar $(IMAGE_NAME)
 
 delete:
 	@echo "Remove docker image"

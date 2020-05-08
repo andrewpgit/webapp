@@ -5,10 +5,10 @@ executors:
       IMAGE_NAME: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
     docker:
       - image: andrewpgit/alpine-git:3.11
+    working_directory: ~/build
 jobs:
   build:
     executor: build-executor
-    working_directory: ~/build
 
     steps:
       - checkout
@@ -29,6 +29,33 @@ jobs:
           command: |
             echo ${CIRCLE_BRANCH}
             make  -e IMAGE_NAME=${IMAGE_NAME} -e TAG=latest build
+      - run:
+          name: Archive docker image.
+          command: make -e IMAGE_NAME=${IMAGE_NAME}  archive
+
+      - persist_to_workspace:
+        root: .
+        path: ./${IMAGE_NAME}.tar
+
+
+  push_image:
+    executor: build-executor
+
+    steps:
+      - attache_workspace:
+          at: ~/build
+
+      - setup_remote_docker
+
+      - run:
+          name: Load docker image
+          command: |
+            echo "Install packages"
+            VER='18.06.3-ce'
+            wget -O /tmp/docker-${VER}.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${VER}.tgz
+            tar -xz -C /tmp -f /tmp/docker-${VER}.tgz
+            mv /tmp/docker/* /usr/local/bin
+            docker load -i ~/build/${IMAGE_NAME}.tar
 
       - deploy:
           name: deployment
@@ -55,10 +82,16 @@ workflows:
   build_deploy:
     jobs:
       - build:
+          filters:
+            tags:
+              only: /^v.*/
+      - push_image:
+          requires:
+            - build
           context: docker-context
           filters:
             tags:
               only: /^v.*/
             branches:
-              only:
-                - /^dev/
+              ignore:
+                - /.*/
