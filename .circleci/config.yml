@@ -34,18 +34,18 @@ jobs:
           command: |
               make -e IMAGE_NAME=${IMAGE_NAME}  archive
 
-      - persist_to_workspace:
-          root: .
+      - save_cache:
           paths:
             - .
+          keys: build-cache
 
 
   push_image:
     executor: build-executor
 
     steps:
-      - attach_workspace:
-          at: ~/build
+      - restore_cache:
+          keys: build-cache
 
       - setup_remote_docker
 
