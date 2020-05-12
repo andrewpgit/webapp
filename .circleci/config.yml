@@ -34,18 +34,17 @@ jobs:
           command: |
               make -e IMAGE_NAME=${IMAGE_NAME}  archive
 
-      - save_cache:
+      - persist_to_workspace:
+          root: .
           paths:
             - .
-          key: build-cache
 
 
   push_image:
     executor: build-executor
 
-    steps:
-      - restore_cache:
-          key: build-cache
+    - attache_workspace:
+        at: ~/build
 
       - setup_remote_docker
 
@@ -63,12 +62,12 @@ jobs:
           name: deployment
           command: |
 
-            IMAGE_NAME="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo $IMAGE_NAME
+
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
 
             if  [ -n  "$CIRCLE_BRANCH" ]; then
-                docker tag $IMAGE_NAME:latest $IMAGE_NAME:${CIRCLE_BRANCH}-latest
+                GIT_SHA1=${CIRCLE_SHA1}
+                docker tag $IMAGE_NAME:latest $IMAGE_NAME:${CIRCLE_BRANCH}-{GIT_SHA1}
                 make -e IMAGE_NAME=${IMAGE_NAME} -e TAG=${CIRCLE_BRANCH}-latest release
             fi
 
