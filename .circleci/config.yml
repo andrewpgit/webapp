@@ -67,8 +67,8 @@ jobs:
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
 
             if  [ -n  "$CIRCLE_BRANCH" ]; then
-                GIT_SHA1=${CIRCLE_SHA1}
-                docker tag $IMAGE_NAME:latest $IMAGE_NAME:${CIRCLE_BRANCH}-{GIT_SHA1}
+                GIT_SHA1=$(CIRCLE_SHA1 | cut -c "1-6")
+                docker tag $IMAGE_NAME:latest $IMAGE_NAME:${CIRCLE_BRANCH}-${GIT_SHA1}
                 make -e IMAGE_NAME=${IMAGE_NAME} -e TAG=${CIRCLE_BRANCH}-latest release
             fi
 
