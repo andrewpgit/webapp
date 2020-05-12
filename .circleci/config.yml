@@ -44,7 +44,7 @@ jobs:
     executor: build-executor
 
     steps:
-      - attache_workspace:
+      - attach_workspace:
           at: ~/build
 
       - setup_remote_docker
