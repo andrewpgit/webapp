@@ -43,8 +43,9 @@ jobs:
   push_image:
     executor: build-executor
 
-    - attache_workspace:
-        at: ~/build
+    steps:
+      - attache_workspace:
+          at: ~/build
 
       - setup_remote_docker
 
