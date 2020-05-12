@@ -3,7 +3,6 @@ executors:
   build-executor:
     environment:
       IMAGE_NAME: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-      GIT_SHA1:
     docker:
       - image: andrewpgit/alpine-git:3.11
     working_directory: ~/build
