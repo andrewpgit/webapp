@@ -2,7 +2,7 @@ version: 2.1
 executors:
   build-executor:
     environment:
-      IMAGE_NAME: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+      IMAGE_NAME: andrewpgit/webapp
     docker:
       - image: andrewpgit/alpine-git:3.11
     working_directory: ~/build
